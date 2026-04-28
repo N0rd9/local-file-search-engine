@@ -1,30 +1,39 @@
-# 🔍 Local File Search Engine PRO
+# 🔍 Local File Search Engine (System Design Project)
 
-## 📌 Description
-A fast and intelligent desktop search engine that indexes and retrieves files using real-time search and fuzzy matching.
+## 📌 Overview
+A modular file search system that indexes and retrieves files using a structured architecture with persistent storage.
+
+---
+
+## 🧠 Architecture
+
+- UI Layer (Tkinter)
+- Search Engine (ranking + fuzzy matching)
+- Indexer (file system scanning)
+- Database (SQLite)
 
 ---
 
 ## 🚀 Features
 
-- ⚡ Real-time search (updates while typing)
-- 🧠 Fuzzy search (handles typos)
-- 📂 File type filtering
-- 🎯 Relevance-based ranking
-- 🖱️ Open files directly from results
+- Persistent indexing (SQLite)
+- Real-time search
+- Fuzzy matching
+- File type filtering
+- Modular architecture
 
 ---
 
-## 🛠️ Technologies
+## 🛠️ Tech Stack
 
 - Python
+- SQLite
 - Tkinter
-- difflib (fuzzy matching)
-- OS file system
+- difflib
 
 ---
 
 ## ▶️ Run
 
 ```bash
-python main.py
+python app.py
