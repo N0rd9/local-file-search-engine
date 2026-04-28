@@ -1,9 +1,12 @@
 import os
 import tkinter as tk
-
-# ------------------ INDEXING ------------------
+from tkinter import filedialog
+import difflib
+import subprocess
 
 file_index = []
+
+# ------------------ INDEXING ------------------
 
 def index_files(folder):
     global file_index
@@ -13,18 +16,36 @@ def index_files(folder):
         for file in files:
             file_index.append({
                 "name": file.lower(),
-                "path": os.path.join(root, file)
+                "path": os.path.join(root, file),
+                "ext": os.path.splitext(file)[1]
             })
+
+    status_label.config(text=f"Indexed {len(file_index)} files")
 
 # ------------------ SEARCH ------------------
 
-def search_files(query):
+def search_files(query, file_type):
     query = query.lower()
     results = []
 
     for file in file_index:
-        if query in file["name"]:
-            score = file["name"].count(query)
+        if file_type != "All" and file["ext"] != file_type:
+            continue
+
+        name = file["name"]
+
+        # Exact match
+        if query == name:
+            score = 100
+        # Partial match
+        elif query in name:
+            score = 70 + name.count(query)
+        else:
+            # Fuzzy match
+            ratio = difflib.SequenceMatcher(None, query, name).ratio()
+            score = int(ratio * 50)
+
+        if score > 20:
             results.append((score, file))
 
     results.sort(reverse=True, key=lambda x: x[0])
@@ -32,42 +53,66 @@ def search_files(query):
 
 # ------------------ UI ------------------
 
-def run_search():
-    query = entry.get()
-    results = search_files(query)
+def update_search(*args):
+    query = search_entry.get()
+    file_type = filter_var.get()
 
     listbox.delete(0, tk.END)
 
-    for file in results[:50]:
+    if not query:
+        return
+
+    results = search_files(query, file_type)
+
+    for file in results[:100]:
         listbox.insert(tk.END, file["path"])
 
 def choose_folder():
-    folder = folder_entry.get()
-    index_files(folder)
-    status_label.config(text="Indexed!")
+    folder = filedialog.askdirectory()
+    if folder:
+        folder_entry.delete(0, tk.END)
+        folder_entry.insert(0, folder)
+        index_files(folder)
+
+def open_file(event):
+    selection = listbox.curselection()
+    if selection:
+        path = listbox.get(selection[0])
+        try:
+            os.startfile(path)  # Windows
+        except:
+            subprocess.call(["open", path])  # Mac/Linux
+
+# ------------------ UI SETUP ------------------
 
 root = tk.Tk()
-root.title("Local File Search Engine")
-root.geometry("600x500")
+root.title("File Search Engine PRO")
+root.geometry("700x550")
 
-# Folder input
+# Folder selection
 folder_entry = tk.Entry(root, width=50)
-folder_entry.pack(pady=10)
-folder_entry.insert(0, "C:/")  # change if needed
+folder_entry.pack(pady=5)
+folder_entry.insert(0, "C:/")
 
-tk.Button(root, text="Index Files", command=choose_folder).pack()
+tk.Button(root, text="Choose Folder", command=choose_folder).pack(pady=5)
 
 # Search
-entry = tk.Entry(root, width=50)
-entry.pack(pady=10)
+search_entry = tk.Entry(root, width=50)
+search_entry.pack(pady=10)
+search_entry.bind("<KeyRelease>", update_search)
 
-tk.Button(root, text="Search", command=run_search).pack()
+# Filter
+filter_var = tk.StringVar(value="All")
+filter_menu = tk.OptionMenu(root, filter_var, "All", ".txt", ".py", ".pdf")
+filter_menu.pack()
 
 # Results
-listbox = tk.Listbox(root, width=80, height=20)
+listbox = tk.Listbox(root, width=90, height=20)
 listbox.pack(pady=10)
+listbox.bind("<Double-Button-1>", open_file)
 
-status_label = tk.Label(root, text="")
+# Status
+status_label = tk.Label(root, text="Select folder to index")
 status_label.pack()
 
 root.mainloop()
