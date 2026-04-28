@@ -1,28 +1,30 @@
-# 🔍 Local File Search Engine
+# 🔍 Local File Search Engine PRO
 
 ## 📌 Description
-A desktop application that indexes and searches files on a local system, similar to a simplified search engine.
+A fast and intelligent desktop search engine that indexes and retrieves files using real-time search and fuzzy matching.
 
 ---
 
 ## 🚀 Features
 
-- Index files from any folder  
-- Fast keyword search  
-- Relevance-based ranking  
-- Simple graphical interface  
+- ⚡ Real-time search (updates while typing)
+- 🧠 Fuzzy search (handles typos)
+- 📂 File type filtering
+- 🎯 Relevance-based ranking
+- 🖱️ Open files directly from results
 
 ---
 
 ## 🛠️ Technologies
 
-- Python  
-- Tkinter  
-- File system handling (os module)  
+- Python
+- Tkinter
+- difflib (fuzzy matching)
+- OS file system
 
 ---
 
-## ▶️ How to Run
+## ▶️ Run
 
 ```bash
 python main.py
