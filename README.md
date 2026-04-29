@@ -1,39 +1,46 @@
-# 🔍 Local File Search Engine (System Design Project)
+# Local File Search Engine
 
-## 📌 Overview
-A modular file search system that indexes and retrieves files using a structured architecture with persistent storage.
+A modular desktop file search system that indexes folders, stores file metadata in SQLite, and retrieves results through real-time fuzzy matching. The project is structured as a small system design exercise with clear separation between the UI, indexer, database, and search logic.
 
----
+## Features
 
-## 🧠 Architecture
+- Index local folders
+- Persist indexed files with SQLite
+- Search in real time as the query changes
+- Use fuzzy matching for more flexible results
+- Filter by file type
+- Open files directly from the results list
+- Keep UI, indexing, search, and storage logic separated
 
-- UI Layer (Tkinter)
-- Search Engine (ranking + fuzzy matching)
-- Indexer (file system scanning)
-- Database (SQLite)
+## Architecture
 
----
+```text
+Tkinter UI
+   |
+   +-- Indexer: scans folders and records file paths
+   |
+   +-- Database: stores indexed files in SQLite
+   |
+   +-- Search Engine: ranks and filters matches
+```
 
-## 🚀 Features
-
-- Persistent indexing (SQLite)
-- Real-time search
-- Fuzzy matching
-- File type filtering
-- Modular architecture
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 - Python
-- SQLite
 - Tkinter
+- SQLite
 - difflib
 
----
-
-## ▶️ Run
+## Run
 
 ```bash
 python app.py
+```
+
+## What It Demonstrates
+
+- Modular application structure
+- Persistent indexing
+- Desktop UI events
+- Local search workflows
+- Basic ranking and fuzzy matching
